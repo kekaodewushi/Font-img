@@ -1,6 +1,9 @@
 package com.company;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class MathUtil {
@@ -10,10 +13,8 @@ public class MathUtil {
             "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
             "a", "s", "d", "f", "g", "h", "j", "k", "l",
             "z", "x", "c", "v", "b", "n", "m", ",", "w", "q", "w",};
-    private static String[] strings3 = {"1", "2", "3", "4", "5", "6", "7", "8", "8", "0",
-            "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-            "a", "s", "d", "f", "g", "h", "j", "k", "l",
-            "z", "x", "c", "v", "b", "n", "m", ",", "w", "q", "w",};
+
+    private static String[] strings3 = {"!", "@", "#", "$", "%", "^", "&", "*"};
     private static String[] strings4 = {"!", "@", "#", "$", "%", "^", "&", "*",
             "1", "2", "3", "4", "5", "6", "7", "8", "8", "0",
             "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
@@ -72,12 +73,31 @@ public class MathUtil {
         baseJLabel.setBounds(10, 50, 150, 30);
         panel.add(baseJLabel);
 
-        JTextField base = new JTextField(20);
-        base.setBounds(170, 50, 300, 25);
-        base.setText("1纯数字，2纯英文，3中英混合，4带特殊字符");
-        panel.add(base);
+//        JTextField base = new JTextField(20);
+//        base.setBounds(170, 50, 300, 25);
+//        base.setText("1纯数字，2纯英文，3中英混合，4带特殊字符");
+//        panel.add(base);
 
+        List<String> listRule1 = new ArrayList<>();
+        listRule1.add("数字");
+        listRule1.add("不需要");
+        JComboBox jcbCity = new JComboBox(listRule1.toArray());
+        jcbCity.setBounds(170, 50, 70, 25);
+        panel.add(jcbCity);
 
+        List<String> listRule2 = new ArrayList<>();
+        listRule2.add("英文");
+        listRule2.add("不需要");
+        JComboBox jcbCity2 = new JComboBox(listRule2.toArray());
+        jcbCity2.setBounds(250, 50, 70, 25);
+        panel.add(jcbCity2);
+
+        List<String> listRule3 = new ArrayList<>();
+        listRule3.add("特殊字符");
+        listRule3.add("不需要");
+        JComboBox jcbCity3 = new JComboBox(listRule3.toArray());
+        jcbCity3.setBounds(330, 50, 70, 25);
+        panel.add(jcbCity3);
         // 创建登录按钮
         JButton gogogo = new JButton("gogogo");
         gogogo.setBounds(10, 110, 80, 25);
@@ -116,34 +136,43 @@ public class MathUtil {
         }
         gogogo.addActionListener(event -> {
             //点击弹框显示
-            textbook.append("密码长度："+path.getText() + "\r\n");
-            textbook.append("密码复杂度："+base.getText() + "\r\n");
-            if (null == base.getText() || null == path.getText()) {
-                textbook.append(path.getText() + "是个啥？？？ " + "\r\n" + path.getText() + "是个啥？？？ " + "\r\n");
+            textbook.append("密码长度：" + path.getText() + "\r\n");
 
-            }
             int lent = 16;
-            int flag = 4;
+
+            //取得当前选中du的City 的名字
+            String rule1 = jcbCity.getSelectedItem().toString();
+            String rule2 = jcbCity2.getSelectedItem().toString();
+            String rule3 = jcbCity3.getSelectedItem().toString();
             try {
-                flag = Integer.valueOf(base.getText());
                 lent = Integer.valueOf(path.getText());
             } catch (NumberFormatException e) {
                 textbook.append(path.getText() + "是个啥？？？ " + "\r\n" + path.getText() + "是个啥？？？ " + "\r\n");
 
             }
-            String paw="";
-           if(flag==1){
-               paw= getLengthArr(lent, strings1);
-           }else if(flag==2){
-               paw=getLengthArr(lent, strings2);
-           }else if(flag==3){
-               paw=getLengthArr(lent, strings3);
-           }else {
-               paw= getLengthArr(lent, strings4);
-           }
 
+            List<String> list = new ArrayList<>();
+            String paw = "";
+            if (rule1 == "数字") {
+                List arrList = Arrays.asList(strings1);
+                list.addAll(arrList);
+            }
+            if (rule2 == "英文") {
+                List<String> list2 = Arrays.asList(strings2);
+                List arrList = new ArrayList(list2);
+                list.addAll(arrList);
+            }
+            if (rule3 == "特殊字符") {
+                List<String> list3 = Arrays.asList(strings3);
+                List arrList = new ArrayList(list3);
+                list.addAll(arrList);
+            }
+            if (list.size() == 0) {
+                list = Arrays.asList(strings4);
+            }
+            paw = getLengthArr(lent, list.toArray(new String[list.size()]));
             System.gc();
-            textbook.append("已运行完成，密码是：\r\n"+paw+"\r\n");
+            textbook.append("已运行完成，密码是：\r\n" + paw + "\r\n");
 
         });
 
