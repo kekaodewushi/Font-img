@@ -152,10 +152,10 @@ public class MathUtil {
 
     private static String getLengthArr(int length, String[] strings) {
         StringBuffer s = new StringBuffer();
-        Random r = new Random(1);
+        Random r = new Random();
         for (int i = 0; i < length; i++) {
             int ran1 = r.nextInt(strings.length);
-            s.append(strings[ran1 - 1]);
+            s.append(strings[ran1]);
         }
         return s.toString();
 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_font-img" default="compile.module.font-img">
+  <dirname property="module.font-img.basedir" file="${ant.file.module_font-img}"/>
+  
+  <property name="module.jdk.home.font-img" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.font-img" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.font-img" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.font-img" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="font-img.output.dir" value="${module.font-img.basedir}/out/production/Font-img"/>
+  <property name="font-img.testoutput.dir" value="${module.font-img.basedir}/out/test/Font-img"/>
+  
+  <path id="font-img.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="font-img.module.production.classpath">
+    <path refid="${module.jdk.classpath.font-img}"/>
+  </path>
+  
+  <path id="font-img.runtime.production.module.classpath">
+    <pathelement location="${font-img.output.dir}"/>
+  </path>
+  
+  <path id="font-img.module.classpath">
+    <path refid="${module.jdk.classpath.font-img}"/>
+    <pathelement location="${font-img.output.dir}"/>
+  </path>
+  
+  <path id="font-img.runtime.module.classpath">
+    <pathelement location="${font-img.testoutput.dir}"/>
+    <pathelement location="${font-img.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.font-img">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.font-img">
+    <patternset refid="excluded.from.module.font-img"/>
+  </patternset>
+  
+  <path id="font-img.module.sourcepath">
+    <dirset dir="${module.font-img.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.font-img" depends="compile.module.font-img.production,compile.module.font-img.tests" description="Compile module Font-img"/>
+  
+  <target name="compile.module.font-img.production" depends="register.custom.compilers" description="Compile module Font-img; production classes">
+    <mkdir dir="${font-img.output.dir}"/>
+    <javac2 destdir="${font-img.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.font-img}/javac">
+      <compilerarg line="${compiler.args.font-img}"/>
+      <bootclasspath refid="font-img.module.bootclasspath"/>
+      <classpath refid="font-img.module.production.classpath"/>
+      <src refid="font-img.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.font-img"/>
+    </javac2>
+    
+    <copy todir="${font-img.output.dir}">
+      <fileset dir="${module.font-img.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.font-img.tests" depends="register.custom.compilers,compile.module.font-img.production" description="compile module Font-img; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.font-img" description="cleanup module">
+    <delete dir="${font-img.output.dir}"/>
+    <delete dir="${font-img.testoutput.dir}"/>
+  </target>
+</project>
